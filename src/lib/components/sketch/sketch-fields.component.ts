@@ -11,16 +11,15 @@ import { isValidHex, HSLA, RGBA } from 'ngx-color';
 @Component({
   selector: 'color-sketch-fields',
   template: `
-  <div class="sketch-fields">
+  <div class="sketch-fields sketch-hex">
     <div class="sketch-double">
-      <color-editable-input
+      <color-editable-input class="test"
         [style]="{ input: input, label: label }"
-        label="hex"
-        [value]="hex.replace('#', '')"
+        [value]="hex"
         (onChange)="handleChange($event)"
       ></color-editable-input>
     </div>
-    <div class="sketch-single">
+    <div class="sketch-single" [hidden]="showRGB">
       <color-editable-input
         [style]="{ input: input, label: label }"
         label="r"
@@ -30,7 +29,7 @@ import { isValidHex, HSLA, RGBA } from 'ngx-color';
         [dragMax]="255"
       ></color-editable-input>
     </div>
-    <div class="sketch-single">
+    <div class="sketch-single" [hidden]="showRGB">
       <color-editable-input
         [style]="{ input: input, label: label }"
         label="g"
@@ -40,7 +39,7 @@ import { isValidHex, HSLA, RGBA } from 'ngx-color';
         [dragMax]="255"
       ></color-editable-input>
     </div>
-    <div class="sketch-single">
+    <div class="sketch-single" [hidden]="showRGB">
       <color-editable-input
         [style]="{ input: input, label: label }"
         label="b"
@@ -50,7 +49,7 @@ import { isValidHex, HSLA, RGBA } from 'ngx-color';
         [dragMax]="255"
       ></color-editable-input>
     </div>
-    <div class="sketch-alpha" *ngIf="disableAlpha === false">
+    <div class="sketch-alpha" [hidden]="showRGB" *ngIf="disableAlpha === false">
       <color-editable-input
         [style]="{ input: input, label: label }"
         label="a"
@@ -81,6 +80,23 @@ import { isValidHex, HSLA, RGBA } from 'ngx-color';
       flex: 1 1 0%;
       padding-left: 6px;
     }
+    .sketch-hex{
+      width: 120px;
+      left: 40px;
+      position: relative;
+    }
+
+    .test input[type="text"]{
+      font-size: 12px;
+      color: rgb(102, 102, 102);
+      border: 0px;
+      outline: none;
+      height: 22px;
+      box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset;
+      border-radius: 4px;
+      padding: 0px 7px;
+      box-sizing: border-box;
+    }
   `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -91,14 +107,20 @@ export class SketchFieldsComponent {
   @Input() rgb: RGBA;
   @Input() hex: string;
   @Input() disableAlpha = false;
+  @Input() showRGB = false;
   @Output() onChange = new EventEmitter<any>();
   input: {[key: string]: string} = {
     width: '100%',
-    padding: '4px 10% 3px',
-    border: 'none',
+    fontSize: '12px',
+    color: '#666',
+    border: '0px',
+    outline: 'none',
+    height: '22px',
+    boxShadow: 'inset 0 0 0 1px #ddd',
+    borderRadius: '4px',
+    padding: '0 7px',
     boxSizing: 'border-box',
-    boxShadow: 'inset 0 0 0 1px #ccc',
-    fontSize: '11px',
+    marginBottom: '10px'
   };
   label: {[key: string]: string} = {
     display: 'block',
@@ -116,6 +138,7 @@ export class SketchFieldsComponent {
   handleChange({ data, $event }) {
     if (data.hex) {
       if (isValidHex(data.hex)) {
+        console.log
         this.onChange.emit({
           data: {
             hex: data.hex,

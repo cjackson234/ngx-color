@@ -60,11 +60,12 @@ export class ColorWrap implements OnInit, OnChanges, OnDestroy {
     this.changes.unsubscribe();
   }
   setState(data) {
+    var hexAlpha = (Math.round(data.rgb.a * 255) + 0x10000).toString(16).substr(-2).toUpperCase();
     this.oldHue = data.oldHue;
     this.hsl = data.hsl;
     this.hsv = data.hsv;
     this.rgb = data.rgb;
-    this.hex = data.hex;
+    this.hex = data.hex + hexAlpha;
     this.source = data.source;
     this.afterValidChange();
   }

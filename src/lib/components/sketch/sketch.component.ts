@@ -51,11 +51,12 @@ import { SketchPresetColorsComponent } from './sketch-preset-colors.component';
     <div class="sketch-controls">
       <color-sketch-fields
         [rgb]="rgb" [hsl]="hsl" [hex]="hex"
+        [showRGB]="showRGB"
         [disableAlpha]="disableAlpha"
         (onChange)="handleValueChange($event)"
       ></color-sketch-fields>
     </div>
-    <div class="sketch-controls">
+    <div class="sketch-controls" style="display:none">
       <color-sketch-preset-colors
         [colors]="presetColors"
         (onClick)="handleBlockChange($event)"
@@ -141,9 +142,24 @@ export class SketchComponent extends ColorWrap {
     '#9B9B9B',
     '#FFFFFF',
   ];
+  @Input() showRGB = false;
   /** Width of picker */
   @Input() width = 200;
   activeBackground: string;
+
+  input: {[key: string]: string} = {
+    width: '100%',
+    fontSize: '12px',
+    color: '#666',
+    border: '0px',
+    outline: 'none',
+    height: '22px',
+    boxShadow: 'inset 0 0 0 1px #ddd',
+    borderRadius: '4px',
+    padding: '0 7px',
+    boxSizing: 'border-box',
+  };
+  
   constructor() {
     super();
   }
